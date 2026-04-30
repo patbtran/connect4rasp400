@@ -12,12 +12,15 @@ def beginning_screen():
 
 #creates matrix full of zeros
 def create_board():
-    board = numpy.zeros((6,7))
+    board = np.zeros((6,7))
     return board
 
 sense = SenseHat()
+board = create_board()
 
-while True:
-    beginning_screen();
+#while True:
+ #   beginning_screen();
 sense.clear()
+
+#this is a test change
 
