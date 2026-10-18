@@ -21,6 +21,12 @@ def beginning_screen():
     sense.show_message("CONNECT", text_colour=(0, 0, 255))
     sense.show_message("4", text_colour=(255, 0, 0), scroll_speed=0.05)
     sense.show_message("PRESS2PLAY", text_colour=(255, 0, 0))
+    
+    sense.stick.get_events()
+    while True:
+        for event in sense.stick.get_events():
+            if event.action == "pressed" and event.direction == "middle":
+                return
 
 #places players piece on board
 def drop_piece(board, row, col, piece):
@@ -159,4 +165,5 @@ def game_loop():
             turn += 1
             turn = turn % 2
                 
+beginning_screen()
 game_loop()
