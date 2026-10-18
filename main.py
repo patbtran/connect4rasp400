@@ -115,10 +115,10 @@ def move_selection(board, piece):
         for event in sense.stick.get_events(): #retrieves joystick movements
             if event.action == "pressed":
                 
-                if event.direction == "left":
+                if event.direction == "right":
                     selected_col = max(0, selected_col - 1)
                     
-                elif event.direction == "right":
+                elif event.direction == "left":
                     selected_col = min(COLUMN_COUNT - 1, selected_col + 1)
                     
                 show_selection(board,selected_col, piece)
