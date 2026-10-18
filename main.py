@@ -7,6 +7,7 @@ ROW_COUNT = 6
 COLUMN_COUNT = 8
 RED = (255, 0, 0,)
 BLUE = (0, 0, 255)
+EMPTY = (0, 0, 0)
 
 #creates matrix full of zeros
 def create_board():
@@ -40,7 +41,9 @@ def get_next_open_row(board,col):
             return r #yes? return that spot
 
 sense = SenseHat()
-board = create_board()            
+sense.set_rotation(180)
+board = create_board()
+
             
 def winner(board, piece):
     #to help imagine how these checks work, think of x&y coordinate, r being x and c being y
@@ -75,13 +78,13 @@ def update_board(board):
     #these top two rows are for the piece indicator and spacing
     for r in range(2):
         for c in range(COLUMN_COUNT):
-            pixels.append(BLACK)
+            pixels.append(EMPTY)
             
                     #range(start, stop, increment/decrement)
     for r in range(ROW_COUNT -1, -1, -1):
         for c in range(COLUMN_COUNT):
             if board[r][c] == 0:
-                pixels.append(BLACK)
+                pixels.append(EMPTY)
             elif board[r][c] == 1:
                 pixels.append(RED)
             elif board[r][c] == 2:
@@ -89,4 +92,35 @@ def update_board(board):
 
     sense.set_pixels(pixels) #this sends the list of 64 colors to LED matrix, updating all at once
     
+    #takes 3 arguments: (current matrix, the col the player is currently selecting, current players piece
+    # players piece: 1 for red, else for blue
+def show_selection(board, selected_col, piece):
+    update_board(board)
+        
+    if piece == 1:
+        color = RED
+    else:
+        color = BLUE
+            
+    sense.set_pixel(selected_col, 0, color)
+        
+
+#joystick movement
+def move_selection(board, piece):
+    selected_col = 3 #indicator light's starting position
     
+    show_selection(board, selected_col, piece)
+    
+    while True: #loop that continuously checks for joystick movement
+        for event in sense.stick.get_events(): #retrieves joystick movements
+            if event.action == "pressed":
+                
+                if event.direction == "left":
+                    selected_col = max(0, selected_col - 1)
+                    
+                elif event.direction == "right":
+                    selected_col = min(COLUMN_COUNT - 1, selected_col + 1)
+                    
+                show_selection(board,selected_col, piece)
+                
+move_selection(board, 1)
