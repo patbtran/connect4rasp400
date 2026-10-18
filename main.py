@@ -116,7 +116,8 @@ def move_selection(board, piece):
             if event.action == "pressed":
                 
                 if event.direction == "right":
-                    selected_col = max(0, selected_col - 1)
+                    selected_col = max(0, selected_col - 1
+                                       )
                     
                 elif event.direction == "left":
                     selected_col = min(COLUMN_COUNT - 1, selected_col + 1)
@@ -131,4 +132,31 @@ def move_selection(board, piece):
                     
                 show_selection(board,selected_col, piece)
                 
-move_selection(board, 1)
+def game_loop():
+    turn = 0
+    game_over = False
+    print("Game started!")
+    
+    while not game_over:
+        if turn == 0:
+            piece = 1 #P1 is red
+        else:
+            piece = 2 #P2 is blue
+            
+        print("current player:", piece)
+    
+        move_selection(board, piece)
+    
+        if winner(board, piece):
+            game_over = True
+        
+            if piece == 1:
+                sense.show_message("RED WINS!", text_colour=RED)
+            else:
+                sense.show_message("BLUE WINS!", text_colour=BLUE)
+            
+        else:
+            turn += 1
+            turn = turn % 2
+                
+game_loop()
