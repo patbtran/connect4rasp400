@@ -121,6 +121,14 @@ def move_selection(board, piece):
                 elif event.direction == "left":
                     selected_col = min(COLUMN_COUNT - 1, selected_col + 1)
                     
+                elif event.direction == "middle": #if player presses button inward
+                    if drop_check(board, selected_col):
+                        row = get_next_open_row(board, selected_col)
+                        drop_piece(board, row, selected_col, piece)
+                        show_selection(board, selected_col, piece)
+                        return
+                    
+                    
                 show_selection(board,selected_col, piece)
                 
 move_selection(board, 1)
